@@ -188,6 +188,85 @@
     }, 5000);
   }
 
+  function injectFloatingButton() {
+    const existing = document.getElementById('late-meet-floating-btn');
+    if (existing) return;
+
+    const btn = document.createElement('button');
+    btn.id = 'late-meet-floating-btn';
+    btn.innerHTML = `
+      <span class="late-meet-btn-icon">🎙️</span>
+      <span class="late-meet-btn-text">Start Copilot</span>
+    `;
+    
+    // Apply styles directly (or we could use content.css)
+    Object.assign(btn.style, {
+      position: 'fixed',
+      left: '24px',
+      bottom: '80px',
+      zIndex: '10000',
+      padding: '12px 20px',
+      background: '#000',
+      color: '#fff',
+      border: '1px solid #333',
+      borderRadius: '30px',
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+      fontFamily: 'Inter, sans-serif',
+      fontSize: '14px',
+      fontWeight: '600',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+      transition: 'all 0.2s ease'
+    });
+
+    btn.addEventListener('mouseover', () => {
+      btn.style.transform = 'translateY(-2px)';
+      btn.style.borderColor = '#555';
+    });
+
+    btn.addEventListener('mouseout', () => {
+      btn.style.transform = 'translateY(0)';
+      btn.style.borderColor = '#333';
+    });
+
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      btn.querySelector('.late-meet-btn-text').textContent = 'Starting...';
+      
+      try {
+        const response = await chrome.runtime.sendMessage({
+          type: 'MANUAL_START_AUDIO',
+          tabId: 'current', // Background script will know sender tab id
+          meetingId: window.location.pathname.split('/')[1]
+        });
+
+        if (response?.success) {
+          btn.style.display = 'none';
+        } else {
+          throw new Error(response?.error || 'Failed to start');
+        }
+      } catch (err) {
+        console.error(`${COPILOT_PREFIX} Error starting audio:`, err);
+        btn.disabled = false;
+        btn.querySelector('.late-meet-btn-text').textContent = 'Error — Retry';
+      }
+    });
+
+    document.body.appendChild(btn);
+  }
+
+  // --- Observation & Init ---
+  const observer = new MutationObserver(() => {
+    // Only inject if it's a real meeting (has meeting code in path)
+    if (window.location.pathname.length > 5 && !window.location.pathname.includes('/_')) {
+      injectFloatingButton();
+    }
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (message?.type === 'SHOW_BRIEF') {
       upsertBriefOverlay(message.briefContent, message.targetName);
@@ -200,9 +279,24 @@
       return true;
     }
 
+    if (message?.type === 'STATE_UPDATE') {
+      const btn = document.getElementById('late-meet-floating-btn');
+      if (btn && message.state.isActive) {
+        btn.style.display = 'none';
+      } else if (btn && !message.state.isActive) {
+        btn.style.display = 'flex';
+      }
+      sendResponse({ success: true });
+      return false;
+    }
+
     sendResponse({ success: false, error: 'Unknown message type' });
     return false;
   });
 
   startParticipantPolling();
+  // Initial check
+  if (window.location.pathname.length > 5 && !window.location.pathname.includes('/_')) {
+    injectFloatingButton();
+  }
 })();
