@@ -20,8 +20,12 @@
     participantNodes: [
       '[data-participant-id] [data-self-name]',
       '[data-participant-id] [role="heading"]',
-      '[data-participant-id] [aria-label]'
-    ]
+      '[data-participant-id] [aria-label]',
+      '[data-self-name]', // The tile for the local user
+      'div[jsname="NfX98"]', // Common class for names on video tiles
+      '[aria-label^="Participant:"]' // Tile aria-labels
+    ],
+    showEveryoneBtn: '[aria-label*="Show everyone"]'
   };
   // Defensive cap based on realistic display names; blocks malformed concatenated labels.
   const MAX_PARTICIPANT_NAME_LEN = 120;
@@ -155,17 +159,45 @@
   function collectParticipants() {
     const names = new Set();
 
+    // 1. Check for specific participant nodes (side panel or tiles)
     for (const selector of SELECTORS.participantNodes) {
       document.querySelectorAll(selector).forEach(node => {
         const label = node.getAttribute('aria-label');
-        const text = (label || node.textContent || '').trim();
-        if (text.length > 0 && text.length < MAX_PARTICIPANT_NAME_LEN) names.add(text);
+        // Handle "Participant: Name" labels
+        const cleanLabel = label ? label.replace(/^Participant:\s*/, '') : null;
+        const text = (cleanLabel || getTextValue(node)).trim();
+        
+        if (text && text.length < MAX_PARTICIPANT_NAME_LEN && !text.includes('…')) {
+          // Filter out generic status text like "Meeting host", "Muted", etc.
+          if (!['Meeting host', 'You', 'Presentation', 'Muted', 'Audio on'].includes(text)) {
+            names.add(text);
+          }
+        }
       });
-
-      if (names.size > 0) break;
     }
 
-    return [...names];
+    // 2. Look for "Self" name specifically
+    const selfNode = document.querySelector('[data-self-name]');
+    if (selfNode) {
+      const selfName = selfNode.getAttribute('data-self-name');
+      if (selfName) names.add(selfName);
+    }
+
+    // 3. Fallback: Parse count from "Show everyone" button if we have fewer names than the UI shows
+    const showEveryone = document.querySelector(SELECTORS.showEveryoneBtn);
+    if (showEveryone) {
+      const label = showEveryone.getAttribute('aria-label');
+      const match = label?.match(/\(\s*(\d+)\s*\)/); // Matches "Show everyone (5)"
+      if (match) {
+        const count = parseInt(match[1]);
+        // If we found fewer names than the count, we can at least ensure we report the right number of "Anonymous" or similar
+        // if we were storing just a count. But since we store an array, we just rely on names for now.
+        // In the future, we could add "Unknown Participant" placeholders.
+      }
+    }
+
+    // Ensure we don't have empty strings
+    return [...names].filter(n => n.length > 0);
   }
 
   let participantPollTimer = null;
