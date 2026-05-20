@@ -1,4 +1,7 @@
 import { State, Topic, TranscriptEntry, TimelineEvent, Decision, ActionItem } from "./types";
+import { initTheme } from "./theme.js";
+
+initTheme();
 
 document.addEventListener("DOMContentLoaded", async () => {
   // ——— Tab Switching ———
