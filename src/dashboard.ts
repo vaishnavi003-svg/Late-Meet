@@ -236,7 +236,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let timerInterval: number | NodeJS.Timeout | null = null;
 
   function startTimer(startTime: number) {
-    if (timerInterval) clearInterval(timerInterval as any);
+    if (timerInterval) return;
     timerInterval = setInterval(() => {
       const elapsed = Math.round((Date.now() - startTime) / 1000);
       const timerEl = document.getElementById("dash-timer");
