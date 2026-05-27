@@ -1,4 +1,5 @@
 import { getApiCredentials, saveApiCredentials } from "./utils/credentials";
+import { validateOpenAIKey, validateElevenLabsKey } from "./utils/api.js";
 
 interface Settings {
   summarizationInterval?: number;
@@ -149,58 +150,96 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ——— Save ———
   document.getElementById("save-btn")?.addEventListener("click", async () => {
+    const saveBtn = document.getElementById("save-btn") as HTMLButtonElement;
+    const status = document.getElementById("save-status");
+
     const openaiKey = (document.getElementById("openai-key") as HTMLInputElement)?.value.trim();
     const elevenlabsKey = (
       document.getElementById("elevenlabs-key") as HTMLInputElement
     )?.value.trim();
 
-    const parsedInterval = intervalSlider ? parseInt(intervalSlider.value, 10) : 30;
-    const validatedInterval =
-      Number.isNaN(parsedInterval) || !Number.isFinite(parsedInterval) ? 30 : parsedInterval;
+    const originalText = saveBtn.textContent || "Save Settings";
+    saveBtn.disabled = true;
+    saveBtn.textContent = "Validating Keys...";
+    try {
+      const [isOpenAIValid, isElevenLabsValid] = await Promise.all([
+        openaiKey ? validateOpenAIKey(openaiKey) : Promise.resolve(true),
+        elevenlabsKey ? validateElevenLabsKey(elevenlabsKey) : Promise.resolve(true),
+      ]);
 
-    const parsedVadThreshold = vadSlider ? parseFloat(vadSlider.value) : 0.012;
-    const validatedVadThreshold =
-      Number.isNaN(parsedVadThreshold) || !Number.isFinite(parsedVadThreshold)
-        ? 0.012
-        : parsedVadThreshold;
+      if (!isOpenAIValid || !isElevenLabsValid) {
+        if (status) {
+          status.style.color = "red";
+          status.textContent = !isOpenAIValid
+            ? "Invalid OpenAI API Key. Please verify and try again."
+            : "Invalid ElevenLabs API Key. Please verify and try again.";
+          status.classList.add("visible");
+          setTimeout(() => status.classList.remove("visible"), 4000);
+        }
+        return;
+      }
 
-    // Grab the active selected color dot element from the document view
-    const activeColorDot = document.querySelector(".color-dot.active");
+      const parsedInterval = intervalSlider ? parseInt(intervalSlider.value, 10) : 30;
+      const validatedInterval =
+        Number.isNaN(parsedInterval) || !Number.isFinite(parsedInterval) ? 30 : parsedInterval;
 
-    const newSettings: Settings = {
-      summarizationInterval: validatedInterval,
-      vadThreshold: validatedVadThreshold,
-      aiModel: (document.getElementById("ai-model") as HTMLSelectElement)?.value,
-      lateJoinerBriefing: (document.getElementById("late-joiner-toggle") as HTMLInputElement)
-        ?.checked,
-      topicDetection: (document.getElementById("topic-toggle") as HTMLInputElement)?.checked,
-      decisionDetection: (document.getElementById("decision-toggle") as HTMLInputElement)?.checked,
-      actionExtraction: (document.getElementById("action-toggle") as HTMLInputElement)?.checked,
-      sentimentAnalysis: (document.getElementById("sentiment-toggle") as HTMLInputElement)?.checked,
+      const parsedVadThreshold = vadSlider ? parseFloat(vadSlider.value) : 0.012;
+      const validatedVadThreshold =
+        Number.isNaN(parsedVadThreshold) || !Number.isFinite(parsedVadThreshold)
+          ? 0.012
+          : parsedVadThreshold;
 
-      // Save theme selections into the global config tree bundle block
-      theme: (themeSelect?.value as Settings["theme"]) || "system",
-      accent:
-        activeColorDot?.getAttribute("data-color") ||
-        settings.accent ||
-        currentAccent ||
-        "210, 100%, 50%",
-    };
+      // Grab the active selected color dot element from the document view
+      const activeColorDot = document.querySelector(".color-dot.active");
 
-    await Promise.all([
-      chrome.storage.local.set({ settings: newSettings }),
-      saveApiCredentials({ openai_api_key: openaiKey, elevenlabs_api_key: elevenlabsKey }),
-    ]);
+      const newSettings: Settings = {
+        summarizationInterval: validatedInterval,
+        vadThreshold: validatedVadThreshold,
+        aiModel: (document.getElementById("ai-model") as HTMLSelectElement)?.value,
+        lateJoinerBriefing: (document.getElementById("late-joiner-toggle") as HTMLInputElement)
+          ?.checked,
+        topicDetection: (document.getElementById("topic-toggle") as HTMLInputElement)?.checked,
+        decisionDetection: (document.getElementById("decision-toggle") as HTMLInputElement)
+          ?.checked,
+        actionExtraction: (document.getElementById("action-toggle") as HTMLInputElement)?.checked,
+        sentimentAnalysis: (document.getElementById("sentiment-toggle") as HTMLInputElement)
+          ?.checked,
 
-    // Show success
-    const status = document.getElementById("save-status");
-    if (status) {
-      status.textContent = "✓ Settings saved successfully!";
-      status.classList.add("visible");
+        // Save theme selections into the global config tree bundle block
+        theme: (themeSelect?.value as Settings["theme"]) || "system",
+        accent:
+          activeColorDot?.getAttribute("data-color") ||
+          settings.accent ||
+          currentAccent ||
+          "210, 100%, 50%",
+      };
 
-      setTimeout(() => {
-        status.classList.remove("visible");
-      }, 3000);
+      await Promise.all([
+        chrome.storage.local.set({ settings: newSettings }),
+        saveApiCredentials({ openai_api_key: openaiKey, elevenlabs_api_key: elevenlabsKey }),
+      ]);
+
+      // Show success
+      if (status) {
+        status.style.color = "";
+        status.textContent = "Settings saved successfully!";
+        status.classList.add("visible");
+
+        setTimeout(() => {
+          status.classList.remove("visible");
+        }, 3000);
+      }
+    } catch (error) {
+      console.error("Error saving settings:", error);
+      if (status) {
+        status.style.color = "red";
+        status.textContent = "An error occurred while saving. Please try again.";
+        status.classList.add("visible");
+        setTimeout(() => status.classList.remove("visible"), 4000);
+      }
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.textContent = originalText;
     }
   });
 });
