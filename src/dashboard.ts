@@ -696,7 +696,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     ) as HTMLInputElement | null;
     if (searchInput && searchInput.value.trim() !== "") {
       // Re-apply search highlight when new transcript lines arrive
-      executeTranscriptSearch();
+      executeTranscriptSearch(true);
     } else {
       container.scrollTop = container.scrollHeight;
     }
@@ -1023,7 +1023,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   let searchDebounceTimer: number | null = null;
 
   function clearTranscriptSearch() {
-    console.log("[Search] Clearing search state...");
     if (
       !searchInput ||
       !searchCounter ||
@@ -1071,12 +1070,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (searchCounter) {
         searchCounter.textContent = `${currentMatchIndex + 1} of ${searchMatches.length}`;
       }
-      console.log(`[Search] Highlighted match ${currentMatchIndex + 1} of ${searchMatches.length}`);
     }
   }
 
-  function executeTranscriptSearch() {
-    console.log("[Search] Starting transcript search...");
+  function executeTranscriptSearch(preserveIndex: boolean = false) {
     if (
       !searchInput ||
       !searchCounter ||
@@ -1085,12 +1082,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       !searchNextBtn ||
       !transcriptContainer
     ) {
-      console.log("[Search] Missing DOM elements. Aborting.");
       return;
     }
 
     const query = searchInput.value.toLowerCase().trim();
-    console.log("[Search] Query:", query);
 
     // Clean existing marks
     const marks = transcriptContainer.querySelectorAll("mark.search-match");
@@ -1101,9 +1096,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         parent.normalize();
       }
     });
-    console.log(`[Search] Cleaned ${marks.length} previous marks.`);
 
     searchMatches = [];
+    const previousIndex = currentMatchIndex;
     currentMatchIndex = -1;
 
     if (!query) {
@@ -1112,7 +1107,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       searchPrevBtn.disabled = true;
       searchNextBtn.disabled = true;
       if (searchCounter) searchCounter.style.display = "none";
-      console.log("[Search] Empty query. Cleared UI.");
       return;
     }
 
@@ -1132,7 +1126,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       }
     }
-    console.log(`[Search] Found ${textNodes.length} valid text nodes to search.`);
 
     textNodes.forEach((textNode) => {
       const textContent = textNode.nodeValue || "";
@@ -1169,10 +1162,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
 
-    console.log(`[Search] Found matches: ${searchMatches.length}`);
-
     if (searchMatches.length > 0) {
-      currentMatchIndex = 0;
+      if (preserveIndex && previousIndex >= 0 && previousIndex < searchMatches.length) {
+        currentMatchIndex = previousIndex;
+      } else {
+        currentMatchIndex = 0;
+      }
       searchPrevBtn.disabled = false;
       searchNextBtn.disabled = false;
       if (searchCounter) searchCounter.style.display = "inline-flex";
@@ -1189,7 +1184,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   searchInput?.addEventListener("input", () => {
     if (searchDebounceTimer) window.clearTimeout(searchDebounceTimer);
-    searchDebounceTimer = window.setTimeout(executeTranscriptSearch, 300);
+    searchDebounceTimer = window.setTimeout(() => executeTranscriptSearch(false), 300);
   });
 
   searchInput?.addEventListener("keydown", (e) => {
