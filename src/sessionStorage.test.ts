@@ -34,6 +34,8 @@ function makeSession(id: string, savedAt: number): StoredSession {
     unresolvedDiscussions: [],
     contradictions: [],
     audioActive: false,
+    unresolvedDiscussions: [],
+    contradictions: [],
   };
 }
 

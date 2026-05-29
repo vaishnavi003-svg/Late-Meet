@@ -917,6 +917,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         const text = typeof i === "string" ? i : i.text || "";
         md += `- ${text}\n`;
       });
+      state.keyInsights.forEach((insight) => {
+        md += `- ${insight}\n`;
+      });
+      md += "\n";
     } else {
       md += `_No insights available_\n\n`;
     }
