@@ -684,37 +684,72 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ——— Export Helpers ———
   function generateMarkdown(state: State): string {
-    let markdown = `# Meeting Summary\n\n`;
-    markdown += `**Date:** ${new Date().toLocaleDateString()}\n`;
-    markdown += `**Duration:** ${formatDuration(state.duration || 0)}\n`;
-    markdown += `**Participants:** ${state.participants?.join(", ") || "N/A"}\n\n`;
-    markdown += `## Summary\n${state.summary || "N/A"}\n\n`;
-    if (state.topics?.length) {
-      markdown += `## Topics\n`;
-      state.topics.forEach((t: Topic) => (markdown += `- ${t.name} (${t.status})\n`));
-      markdown += "\n";
+    const date = new Date().toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    let md = `# Meeting Summary — ${date}\n\n`;
+    md += `**Meeting ID:** ${state.meetingId || "N/A"}\n`;
+    md += `**Duration:** ${formatDuration(state.duration || 0)}\n`;
+    md += `**Sentiment:** ${state.sentiment || "neutral"}\n\n`;
+
+    md += `## Attendees\n`;
+    if (state.participants?.length) {
+      md += state.participants.map((p) => `- ${p}`).join("\n") + "\n\n";
+    } else {
+      md += `_No participants detected_\n\n`;
     }
-    if (state.decisions?.length) {
-      markdown += `## Decisions\n`;
-      state.decisions.forEach(
-        (d: Decision) => (markdown += `- ${d.text}${d.by ? ` — ${d.by}` : ""}\n`),
-      );
-      markdown += "\n";
-    }
+
+    md += `## Summary\n`;
+    md += `${state.summary || "_No summary available_"}\n\n`;
+
+    md += `## Action Items\n`;
     if (state.actionItems?.length) {
-      markdown += `## Action Items\n`;
       state.actionItems.forEach((a: ActionItem) => {
         const task = resolveActionKey(a);
         if (!task) return;
         const statusKey = buildActionStatusKey(currentMeetingId, task);
         const done = actionStatuses.get(statusKey) === true;
-        markdown += done ? `- [x] ${task}` : `- [ ] ${task}`;
-        if (a.owner) markdown += ` → ${a.owner}`;
-        if (a.deadline) markdown += ` (due: ${a.deadline})`;
-        markdown += "\n";
+        md += done ? `- [x] ${task}` : `- [ ] ${task}`;
+        if (a.owner) md += ` — ${a.owner}`;
+        if (a.deadline) md += ` (due: ${a.deadline})`;
+        md += "\n";
       });
+      md += "\n";
+    } else {
+      md += `_No action items_\n\n`;
     }
-    return markdown;
+
+    md += `## Key Decisions\n`;
+    if (state.decisions?.length) {
+      state.decisions.forEach((d: Decision) => {
+        md += `- ${d.text}${d.by ? ` — ${d.by}` : ""}\n`;
+      });
+      md += "\n";
+    } else {
+      md += `_No decisions recorded_\n\n`;
+    }
+
+    md += `## Topics Covered\n`;
+    if (state.topics?.length) {
+      state.topics.forEach((t: Topic) => {
+        md += `- ${t.name} _(${t.status})_\n`;
+      });
+      md += "\n";
+    } else {
+      md += `_No topics detected_\n\n`;
+    }
+
+    md += `## Key Insights\n`;
+    if (state.keyInsights?.length) {
+      state.keyInsights.forEach((i: string) => (md += `- ${i}\n`));
+      md += "\n";
+    } else {
+      md += `_No insights available_\n\n`;
+    }
+
+    return md;
   }
 
   let exportToastTimer: number | null = null;
@@ -782,40 +817,61 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  document.getElementById("export-json-btn")?.addEventListener("click", async () => {
+  document.getElementById("export-clipboard-btn")?.addEventListener("click", async () => {
     try {
       const state = await chrome.runtime.sendMessage({ type: "GET_STATE" });
-      if (!state) throw new Error("No meeting data available");
-      const sessionData = {
-        exportedAt: new Date().toISOString(),
-        summary: state.summary || "",
-        participants: state.participants || [],
-        topics: state.topics || [],
-        decisions: state.decisions || [],
-        actionItems: state.actionItems || [],
-        transcript: state.transcript || [],
-        timeline: state.timeline || [],
-      };
-      const filename = `meeting-backup-${new Date().toISOString().slice(0, 10)}.json`;
-      downloadFile(JSON.stringify(sessionData, null, 2), filename, "application/json");
-      showToast("Downloaded as .json backup", "success");
+      if (!state) {
+        showToast("No meeting data available", "error");
+        return;
+      }
+      const markdown = generateMarkdown(state);
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(markdown);
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = markdown;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand("copy");
+        textArea.remove();
+      }
+      showToast("Copied to clipboard", "success");
     } catch (err) {
-      showToast("Failed to export: " + (err instanceof Error ? err.message : String(err)), "error");
+      console.error(err);
+      showToast("Failed to copy to clipboard", "error");
     } finally {
       exportDropdown?.setAttribute("hidden", "");
       exportBtn?.setAttribute("aria-expanded", "false");
     }
   });
 
-  document.getElementById("export-clipboard-btn")?.addEventListener("click", async () => {
+  document.getElementById("export-json-btn")?.addEventListener("click", async () => {
     try {
       const state = await chrome.runtime.sendMessage({ type: "GET_STATE" });
-      if (!state) return;
-      const markdown = generateMarkdown(state);
-      await navigator.clipboard.writeText(markdown);
-      showToast("Copied to clipboard", "success");
-    } catch {
-      showToast("Failed to copy to clipboard", "error");
+      if (!state) throw new Error("No meeting data available");
+      const sessionData = {
+        exportedAt: new Date().toISOString(),
+        meetingId: state.meetingId || "unknown",
+        duration: state.duration || 0,
+        sentiment: state.sentiment || "neutral",
+        summary: state.summary || "",
+        participants: state.participants || [],
+        topics: state.topics || [],
+        decisions: state.decisions || [],
+        actionItems: state.actionItems || [],
+        keyInsights: state.keyInsights || [],
+        timeline: state.timeline || [],
+        transcript: state.transcript || [],
+      };
+      const filename = `meeting-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      downloadFile(JSON.stringify(sessionData, null, 2), filename, "application/json");
+      showToast("Downloaded as .json backup", "success");
+    } catch (err) {
+      showToast("Failed to export: " + (err instanceof Error ? err.message : String(err)), "error");
     } finally {
       exportDropdown?.setAttribute("hidden", "");
       exportBtn?.setAttribute("aria-expanded", "false");
