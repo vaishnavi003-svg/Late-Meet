@@ -1,6 +1,6 @@
 # Contributing Guidelines
 
-Thank you for your interest in contributing to this project! We welcome contributions from everyone. By participating in this project, you agree to abide by our code of conduct.
+Thank you for your interest in contributing to this project! We welcome contributions from everyone. By participating in this project, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## How to Contribute
 
