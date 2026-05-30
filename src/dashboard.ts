@@ -934,9 +934,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     md += `## Key Insights\n`;
     if (state.keyInsights?.length) {
+ feature/transcript-search
       state.keyInsights.forEach((i: any) => {
         const text = typeof i === "string" ? i : i.text;
         if (text) md += `- ${text}\n`;
+
+      state.keyInsights.forEach((insight) => {
+        md += `- ${insight}\n`;
+ main
       });
       md += "\n";
     } else {
