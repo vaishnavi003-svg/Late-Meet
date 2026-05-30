@@ -29,16 +29,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   const passphraseStatus = document.getElementById("passphrase-status");
 
   function updatePassphraseStatus() {
+    if (!passphraseStatus) return;
     if (isUnlocked()) {
-      if (passphraseStatus) {
-        passphraseStatus.style.color = "#22C55E";
-        passphraseStatus.textContent = "Unlocked — encryption key is active";
-      }
+      passphraseStatus.style.color = "#22C55E";
+      passphraseStatus.textContent = "Unlocked — encryption key is active";
     } else {
-      if (passphraseStatus) {
-        passphraseStatus.style.color = "#EF4444";
-        passphraseStatus.textContent = "Locked — enter passphrase to unlock encryption";
-      }
+      passphraseStatus.style.color = "#EF4444";
+      passphraseStatus.textContent = "Locked — enter passphrase to unlock encryption";
     }
   }
 

@@ -71,7 +71,7 @@ export async function unlockCredentials(passphrase: string): Promise<boolean> {
       try {
         const sampleKey = CREDENTIAL_KEYS.find((k) => encryptedCreds[k]);
         if (sampleKey && encryptedCreds[sampleKey]) {
-          const combined = base64ToArrayBuffer(encryptedCreds[sampleKey]!);
+          const combined = base64ToArrayBuffer(encryptedCreds[sampleKey]);
           const iv = new Uint8Array(combined.slice(0, IV_LENGTH));
           const ciphertext = combined.slice(IV_LENGTH);
           await crypto.subtle.decrypt({ name: AES_ALGORITHM, iv }, key, ciphertext);

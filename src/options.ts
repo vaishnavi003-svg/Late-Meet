@@ -197,11 +197,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (elevenlabsKeyInput && creds.elevenlabs_api_key) {
         elevenlabsKeyInput.value = creds.elevenlabs_api_key;
       }
-    } else {
-      if (passphraseStatus) {
-        passphraseStatus.style.color = "`#EF4444`";
-        passphraseStatus.textContent = "Wrong passphrase — could not decrypt stored credentials";
-      }
+    } else if (passphraseStatus) {
+      passphraseStatus.style.color = "#EF4444";
+      passphraseStatus.textContent = "Wrong passphrase — could not decrypt stored credentials";
     }
   }
 
