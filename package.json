@@ -45,14 +45,14 @@
     "@eslint/js": "^9.39.4",
     "@types/chrome": "^0.1.42",
     "@types/node": "^20.19.41",
-    "@typescript-eslint/eslint-plugin": "^8.59.3",
+    "@typescript-eslint/eslint-plugin": "^8.60.0",
     "@typescript-eslint/parser": "^8.59.3",
     "chrome-types": "^0.1.429",
     "eslint": "^9.16.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.6.0",
     "husky": "^9.0.11",
-    "lint-staged": "^17.0.5",
+    "lint-staged": "^17.0.6",
     "prettier": "^3.2.5",
     "tsx": "^4.20.3",
     "typescript": "^5.3.3",
@@ -60,8 +60,8 @@
     "@types/express": "^4.17.21"
   },
   "dependencies": {
-    "@elevenlabs/elevenlabs-js": "^2.45.0",
-    "@openrouter/sdk": "^0.12.20",
+    "@elevenlabs/elevenlabs-js": "^2.49.1",
+    "@openrouter/sdk": "^0.12.79",
     "express": "^4.19.2"
   },
   "overrides": {
