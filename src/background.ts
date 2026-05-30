@@ -1153,10 +1153,12 @@ async function stopAudioCapture(reason = "Stopped") {
 }
 
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-  if (changeInfo.status === "complete" && tab.url?.includes("meet.google.com/")) {
-    const urlMatch = tab.url.match(/meet\.google\.com\/([a-z\-]+)/);
-    const meetingId = urlMatch ? urlMatch[1] : null;
-
+  if (changeInfo.status !== "complete" || !tab.url) return;
+  try {
+    const parsed = new URL(tab.url);
+    if (parsed.hostname !== "meet.google.com") return;
+    const pathMatch = /^\/([a-z-]+)/.exec(parsed.pathname);
+    const meetingId = pathMatch ? pathMatch[1] : null;
     if (meetingId && meetingId !== "new") {
       if (!state.isActive) {
         resetState();
@@ -1169,21 +1171,24 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         await broadcastStateUpdate();
       }
     }
+  } catch {
+    // invalid URL — ignore silently
   }
 });
 
 chrome.tabs.onActivated.addListener(async (activeInfo) => {
   try {
     const tab = await chrome.tabs.get(activeInfo.tabId);
-    if (tab.url?.includes("meet.google.com/")) {
-      const urlMatch = tab.url.match(/meet\.google\.com\/([a-z\-]+)/);
-      const meetingId = urlMatch ? urlMatch[1] : null;
-      if (meetingId && meetingId !== "new" && !state.isActive) {
-        state.meetingId = meetingId;
-        state.meetingUrl = tab.url;
-        state.targetTabId = activeInfo.tabId;
-        await broadcastStateUpdate();
-      }
+    if (!tab.url) return;
+    const parsed = new URL(tab.url);
+    if (parsed.hostname !== "meet.google.com") return;
+    const pathMatch = /^\/([a-z-]+)/.exec(parsed.pathname);
+    const meetingId = pathMatch ? pathMatch[1] : null;
+    if (meetingId && meetingId !== "new" && !state.isActive) {
+      state.meetingId = meetingId;
+      state.meetingUrl = tab.url;
+      state.targetTabId = activeInfo.tabId;
+      await broadcastStateUpdate();
     }
   } catch (err) {
     console.debug("[LateMeet] tab activation handler failed:", err);
