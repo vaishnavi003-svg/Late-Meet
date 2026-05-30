@@ -47,7 +47,7 @@
     "@typescript-eslint/parser": "^8.59.3",
     "chrome-types": "^0.1.428",
     "eslint": "^9.16.0",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-prettier": "^10.1.8",
     "globals": "^17.6.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
