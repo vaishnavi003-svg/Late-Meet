@@ -1198,7 +1198,7 @@ async function startAudioCapture(
   }
   isStartingAudio = true;
 
-  const createdSession = !state.isActive;
+  const createdSession = !state.audioActive;
 
   try {
     await ensureOffscreenDocument();
@@ -1611,6 +1611,62 @@ chrome.commands.onCommand.addListener(async (command) => {
     }
   } catch (err) {
     console.error("[LateMeet] Keyboard command failed:", command, err);
+  }
+});
+
+function createContextMenu() {
+  chrome.contextMenus.removeAll(() => {
+    chrome.contextMenus.create({
+      id: "transcribe-tab",
+      title: "🎙️ Transcribe current tab with Late-Meet",
+      contexts: ["page"],
+    });
+  });
+}
+
+chrome.runtime.onInstalled.addListener(() => {
+  createContextMenu();
+});
+
+chrome.runtime.onStartup.addListener(() => {
+  createContextMenu();
+});
+
+chrome.contextMenus.onClicked.addListener(async (info, tab) => {
+  if (info.menuItemId !== "transcribe-tab") return;
+  if (!tab?.id) return;
+
+  const isMeetTab = Boolean(tab.url?.includes("meet.google.com/"));
+  const meetingId = isMeetTab
+    ? (tab.url?.match(/meet\.google\.com\/([a-z-]+)/)?.[1] ?? null)
+    : null;
+  const meetingUrl = tab.url || null;
+
+  if (!state.audioActive) {
+    try {
+      // Detect if the context-menu target differs from the preloaded state.
+      // If switching from Meet to non-Meet (or vice versa), force a fresh reset
+      // to avoid session metadata leakage.
+      const wasPreloadedMeet = Boolean(state.meetingUrl?.includes("meet.google.com/"));
+      const isNewMeet = isMeetTab;
+      const contextMismatch = wasPreloadedMeet !== isNewMeet;
+
+      // If we detect a context switch, reset state before starting capture.
+      // This prevents old Meet IDs from tainting YouTube/Zoom transcriptions.
+      if (contextMismatch) {
+        resetState();
+      }
+
+      await startAudioCapture(tab.id, meetingId || "unknown", meetingUrl);
+    } catch (err) {
+      console.error("[LateMeet] Failed to start capture from context menu:", err);
+    }
+  }
+
+  try {
+    await chrome.sidePanel.open({ tabId: tab.id });
+  } catch (openError) {
+    console.error("[LateMeet] Failed to open side panel from context menu:", openError);
   }
 });
 

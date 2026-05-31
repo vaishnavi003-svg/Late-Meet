@@ -7,6 +7,7 @@
     "storage",
     "tabs",
     "tabCapture",
+    "contextMenus",
     "offscreen",
     "sidePanel",
     "notifications",
@@ -51,6 +52,7 @@
         "default": "Ctrl+Shift+P",
         "mac": "Command+Shift+P"
       },
+      "description": "Open the Late-Meet side panel"
       "description": "Open the Late Meet side panel"
     }
   },
