@@ -843,10 +843,13 @@ body::-webkit-scrollbar-thumb {
 /* --- RESPONSIVE ADJUSTMENTS FOR HIGH ZOOM LEVELS / SMALL SCREENS --- */
 @media (max-width: 360px) {
   .stats-row {
-    grid-template-columns: repeat(2, 1fr) !important; /* Stack stats in 2x2 grid instead of crushing 4 columns */
+    grid-template-columns: repeat(
+      2,
+      1fr
+    ) !important; /* Stack stats in 2x2 grid instead of crushing 4 columns */
     gap: 8px !important;
   }
-  
+
   .duration-text {
     font-size: 18px !important; /* Scale down heading font sizes smoothly */
   }
@@ -854,7 +857,7 @@ body::-webkit-scrollbar-thumb {
   .setup-container {
     padding: 24px 16px !important;
   }
-  
+
   .session-modal-content {
     width: 90% !important; /* Prevent popup cards from hard-clipping */
   }
