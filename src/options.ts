@@ -154,11 +154,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     btn.addEventListener("click", () => {
       const targetId = btn.dataset.target;
       if (targetId) {
-        if (targetId) {
-          const target = document.getElementById(targetId) as HTMLInputElement | null;
-          if (target) {
-            target.type = target.type === "password" ? "text" : "password";
-          }
+        const target = document.getElementById(targetId) as HTMLInputElement | null;
+        if (target) {
+          target.type = target.type === "password" ? "text" : "password";
         }
       }
     });
