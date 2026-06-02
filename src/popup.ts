@@ -650,4 +650,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       el.classList.remove("shake", "border-danger");
     }, 400);
   }
+
+  // ——— Cleanup on popup close ———
+  window.addEventListener("unload", () => {
+    if (durationInterval) {
+      clearInterval(durationInterval as number);
+      durationInterval = null;
+    }
+  });
 });
