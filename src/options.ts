@@ -234,7 +234,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const elevenlabsKey =
       (document.getElementById("elevenlabs-key") as HTMLInputElement | null)?.value.trim() ?? "";
 
-    const originalText = saveBtn.textContent || "Save Settings";
+    const originalText = saveBtn.textContent?.trim() || "Save Settings";
     if (pendingUnlock) await pendingUnlock;
     if (!isUnlocked()) {
       if (status) {
