@@ -60,6 +60,7 @@
     "Supabase",
     "creds",
     "timeslice"
+    "labelledby"
   ],
   "ignorePaths": [
     "node_modules",
