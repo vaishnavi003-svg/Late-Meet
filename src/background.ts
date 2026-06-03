@@ -24,14 +24,18 @@ const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
 const OPENAI_WHISPER_URL = "https://api.openai.com/v1/audio/transcriptions";
 const OFFSCREEN_DOCUMENT_PATH = "src/offscreen.html";
 const OFFSCREEN_DOCUMENT_URL = chrome.runtime.getURL(OFFSCREEN_DOCUMENT_PATH);
-const MAX_PROMPT_LENGTH = 2000;
-const TRANSCRIPT_WINDOW_SIZE = 25;
-const SUMMARIZATION_MAX_TOKENS = 1200;
-const JOINER_MESSAGE_MAX_TOKENS = 120;
-import { DEFAULT_CHAT_MODEL, ELEVENLABS_STT_MODEL, WHISPER_MODEL } from "./config";
-const MAX_PENDING_AUDIO_CHUNKS = 8;
-// Delay late-joiner auto messages until 10s to avoid lobby/join churn spam.
-const MIN_MEETING_DURATION_FOR_WELCOME = 10;
+import {
+  BROADCAST_THROTTLE_MS,
+  DEFAULT_CHAT_MODEL,
+  ELEVENLABS_STT_MODEL,
+  JOINER_MESSAGE_MAX_TOKENS,
+  MAX_PENDING_AUDIO_CHUNKS,
+  MAX_PROMPT_LENGTH,
+  MIN_MEETING_DURATION_FOR_WELCOME,
+  SUMMARIZATION_MAX_TOKENS,
+  TRANSCRIPT_WINDOW_SIZE,
+  WHISPER_MODEL,
+} from "./config";
 
 // ---------------------------------------------------------------------------
 // API Transaction Manager
@@ -400,7 +404,6 @@ function uiSnapshot() {
 // Throttled State Broadcast
 // ---------------------------------------------------------------------------
 
-const BROADCAST_THROTTLE_MS = 500;
 let lastBroadcastTime = 0;
 let pendingBroadcast = false;
 let broadcastTimerHandle: ReturnType<typeof setTimeout> | null = null;

@@ -1,4 +1,12 @@
 import { VoiceActivityTracker, isChunkViable } from "./audioProcessing";
+import {
+  MAX_BUFFER_MS,
+  SILENCE_FLUSH_MS,
+  VAD_SAMPLE_MS,
+  WAVEFORM_BUCKETS,
+  WAVEFORM_GAIN,
+  WAVEFORM_INTERVAL_MS,
+} from "./config";
 
 let mediaStream: MediaStream | null = null;
 let microphoneStream: MediaStream | null = null;
@@ -14,12 +22,6 @@ let pendingChunks: Blob[] = [];
 let isStopping = false;
 let isDrainingQueue = false;
 
-const VAD_SAMPLE_MS = 250;
-const WAVEFORM_INTERVAL_MS = 50;
-const WAVEFORM_BUCKETS = 32;
-const WAVEFORM_GAIN = 6;
-const SILENCE_FLUSH_MS = 1500;
-const MAX_BUFFER_MS = 25000;
 const SILENCE_FLUSH_TICKS = Math.ceil(SILENCE_FLUSH_MS / VAD_SAMPLE_MS);
 let rmsThreshold = 0.012;
 
