@@ -1460,8 +1460,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // Fast-path: waveform data is display-only and does not need service worker
   // processing. Return immediately to avoid unnecessary hydration and state work.
   if (message?.type === "WAVEFORM_DATA" || message?.type === "OFFSCREEN_LOG") {
-    if (message.type === "OFFSCREEN_LOG") {
-      console.log("[LateMeet][offscreen]", message.message ?? "(empty message)");
+    if (message.type === "OFFSCREEN_LOG" && typeof message.message === "string") {
+      console.log("[LateMeet][offscreen]", message.message);
     }
     sendResponse({ success: true });
     return false;
