@@ -144,7 +144,6 @@ export async function persistMeetingSession(
   const currentIndex =
     indexedSessions.length > 0 ? indexedSessions : legacySessions.map(createSessionListItem);
 
-  
   const sessionKey = getSavedSessionKey(pendingSession.id);
   const incomingBytes = estimateStorageBytes({
     [sessionKey]: pendingSession,
