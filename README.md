@@ -640,10 +640,6 @@ git push origin feature/your-feature-name
 | :---: | :--- | :--- |
 | [#412](https://github.com/shouri123/Late-Meet/issues/412) | \[Enhancement\] Add support for Google Meet breakout room transcription | General |
 | [#410](https://github.com/shouri123/Late-Meet/issues/410) | \[Bug\] \`background.ts\` service worker fails to restart after Chrome updates extension | General |
-| [#409](https://github.com/shouri123/Late-Meet/issues/409) | \[Enhancement\] Add meeting duration tracking to the summary view | General |
-| [#407](https://github.com/shouri123/Late-Meet/issues/407) | \[Bug\] \`popup.ts\` throws uncaught error when opened outside a Google Meet tab | General |
-| [#406](https://github.com/shouri123/Late-Meet/issues/406) | \[Enhancement\] Add export to Markdown format for meeting transcripts | General |
-| [#404](https://github.com/shouri123/Late-Meet/issues/404) | \[Bug\] Meeting transcript continues recording after tab is navigated away from Google Meet | General |
 
 
 #### 🔴 Advanced — `level-3`
@@ -651,9 +647,6 @@ git push origin feature/your-feature-name
 | # | Title | Skills |
 | :---: | :--- | :--- |
 | [#411](https://github.com/shouri123/Late-Meet/issues/411) | \[Performance\] \`speakerAttribution.ts\` allocates new arrays on every audio frame | General |
-| [#408](https://github.com/shouri123/Late-Meet/issues/408) | \[Security\] No integrity validation on meeting data loaded from storage | General |
-| [#405](https://github.com/shouri123/Late-Meet/issues/405) | \[Performance\] Dashboard renders all past meeting summaries at once without virtualization | General |
-| [#403](https://github.com/shouri123/Late-Meet/issues/403) | \[Security\] Extension stores OpenAI API key in sync storage accessible across devices | General |
 
 
 </div>
