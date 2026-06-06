@@ -636,7 +636,10 @@ git push origin feature/your-feature-name
 
 #### 🟡 Intermediate — `level-2`
 
-*No open issues for this level right now! Stay tuned.*
+| # | Title | Skills |
+| :---: | :--- | :--- |
+| [#573](https://github.com/shouri123/Late-Meet/issues/573) | \[Bug\] Add Stress Tests for High-Volume Audio Chunk Processing | General |
+
 
 #### 🔴 Advanced — `level-3`
 
