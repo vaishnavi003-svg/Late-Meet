@@ -535,6 +535,7 @@ initTheme();
     btn.id = "mc-float-btn";
     btn.type = "button";
     btn.setAttribute("aria-label", "Start Late Meet Copilot");
+    btn.setAttribute("tabindex", "0");
 
     const inner = document.createElement("div");
     inner.className = "mc-float-btn-inner";
