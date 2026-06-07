@@ -124,17 +124,17 @@ It uses **Chrome's native `tabCapture` API** to intercept audio without adding p
 
 <div align="center">
 
-|     | Feature                     | What it does                                                                       |
-| :-: | :-------------------------- | :--------------------------------------------------------------------------------- |
-| 🤫  | **Invisible Audio Capture** | Chrome's `tabCapture` + Offscreen Document APIs — no bot joins, no alert shown     |
-| 🔤  | **ElevenLabs Scribe STT**   | Industry-leading multilingual transcription with OpenAI Whisper fallback           |
-| ⚡  | **Late-Joiner Briefings**   | Join 10 min late → hit "Catch Me Up" → get a private AI summary of what you missed |
-| 🧠  | **Proactive Intelligence**  | Auto-detects Meet sessions, 1+N participant tracking, action-item extraction       |
-| 🔑  | **BYOK Model**              | Your ElevenLabs + OpenAI keys — zero vendor lock-in, zero subscriptions            |
-| 💎  | **Premium Glass UI**        | Deep-monochrome dashboard, glassmorphism, smooth animations                        |
-| 🏠  | **Local-First Storage**     | `chrome.storage.local` only — Save or Discard after each session, your choice      |
-| 🌍  | **Multilingual**            | ElevenLabs Scribe handles multiple languages out of the box                        |
 
+| Feature | What it does |
+|:--------|:--------------|
+| 🤫 **Invisible Audio Capture** | Chrome's `tabCapture` + Offscreen Document APIs — no bot joins, no alert shown |
+| 🔤 **ElevenLabs Scribe STT** | Industry-leading multilingual transcription with OpenAI Whisper fallback |
+| ⚡ **Late-Joiner Briefings** | Join 10 min late → hit "Catch Me Up" → get a private AI summary of what you missed |
+| 🧠 **Proactive Intelligence** | Auto-detects Meet sessions, 1+N participant tracking, action-item extraction |
+| 🔑 **BYOK Model** | Your ElevenLabs + OpenAI keys — zero vendor lock-in, zero subscriptions |
+| 💎 **Premium Glass UI** | Deep-monochrome dashboard, glassmorphism, smooth animations |
+| 🏠 **Local-First Storage** | `chrome.storage.local` only — Save or Discard after each session |
+| 🌍 **Multilingual** | ElevenLabs Scribe handles multiple languages out of the box |
 </div>
 
 ---
