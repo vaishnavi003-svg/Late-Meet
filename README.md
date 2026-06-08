@@ -750,12 +750,13 @@ Before submitting, verify all boxes:
 
 Control Late Meet without touching your mouse — perfect for accessibility and power users.
 
-| Shortcut       | Mac           | Action                  |
-| :------------- | :------------ | :---------------------- |
-| `Ctrl+Shift+S` | `Cmd+Shift+S` | Toggle recording on/off |
-| `Ctrl+Shift+P` | `Cmd+Shift+P` | Open the side panel     |
+| Shortcut       | Mac           | Action                   |
+| :------------- | :------------ | :----------------------- |
+| `Ctrl+Shift+S` | `Cmd+Shift+S` | Toggle recording on/off  |
+| `Ctrl+Shift+P` | `Cmd+Shift+P` | Open the side panel      |
+| `Ctrl+Shift+Y` | `Cmd+Shift+Y` | Save the current session |
 
-> Shortcuts can be customized at `chrome://extensions/shortcuts`.
+> The save-session shortcut was changed from `Ctrl+Shift+W` / `Cmd+Shift+W` because that combination is reserved by Chrome for closing windows. Shortcuts can be customized at `chrome://extensions/shortcuts`.
 
 ---
 
