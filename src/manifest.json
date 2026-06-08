@@ -71,6 +71,7 @@
       "description": "Save the current meeting session"
     }
   },
+  "_comment_csp": "Strengthened CSP: scripts restricted to self only, no unsafe-eval or unsafe-inline",
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self';"
   }
