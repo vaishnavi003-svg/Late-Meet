@@ -571,8 +571,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const list = document.getElementById("dash-insights-list");
     if (!list) return;
     if (!insights || insights.length === 0) {
-      list.innerHTML =
-        '<li class="empty-msg">Insights will appear as the conversation progresses</li>';
+      list.innerHTML = getEmptyStateHTML(
+        "Insights will appear as the conversation progresses",
+        true,
+      );
       return;
     }
     list.innerHTML = insights
@@ -600,7 +602,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const list = document.getElementById("dash-unresolved-list");
     if (!list) return;
     if (!discussions || discussions.length === 0) {
-      list.innerHTML = '<li class="empty-msg">No unresolved discussions yet</li>';
+      list.innerHTML = getEmptyStateHTML("No unresolved discussions yet", true);
       return;
     }
     list.innerHTML = discussions.map((d) => `<li>${escapeHtml(d || "")}</li>`).join("");
@@ -610,7 +612,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const list = document.getElementById("dash-contradictions-list");
     if (!list) return;
     if (!contradictions || contradictions.length === 0) {
-      list.innerHTML = '<li class="empty-msg">No contradictions detected</li>';
+      list.innerHTML = getEmptyStateHTML("No contradictions detected", true);
       return;
     }
     list.innerHTML = contradictions
@@ -631,7 +633,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const container = document.getElementById("dash-topics-full");
     if (!container) return;
     if (!topics || topics.length === 0) {
-      container.innerHTML = '<div class="empty-msg">No topics detected yet</div>';
+      container.innerHTML = getEmptyStateHTML("No topics detected yet");
       return;
     }
     container.innerHTML = topics
@@ -655,7 +657,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const container = document.getElementById("dash-decisions-list");
     if (!container) return;
     if (!decisions || decisions.length === 0) {
-      container.innerHTML = '<div class="empty-msg">No decisions detected yet</div>';
+      container.innerHTML = getEmptyStateHTML("No decisions detected yet");
       return;
     }
     container.innerHTML = decisions
@@ -684,7 +686,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const container = document.getElementById("dash-actions-list");
     if (!container) return;
     if (!actions || actions.length === 0) {
-      container.innerHTML = '<div class="empty-msg">No action items detected yet</div>';
+      container.innerHTML = getEmptyStateHTML("No action items detected yet");
       return;
     }
 
@@ -789,7 +791,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const container = document.getElementById("dash-participants-list");
     if (!container) return;
     if (!participants || participants.length === 0) {
-      container.innerHTML = '<div class="empty-msg">No participants detected</div>';
+      container.innerHTML = getEmptyStateHTML("No participants detected");
       return;
     }
 
@@ -853,8 +855,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const container = document.getElementById("dash-timeline");
     if (!container) return;
     if (!timeline || timeline.length === 0) {
-      container.innerHTML =
-        '<div class="empty-msg">Timeline will build as the meeting progresses</div>';
+      container.innerHTML = container.innerHTML = getEmptyStateHTML(
+        "Timeline will build as the meeting progresses",
+      );
       return;
     }
 
@@ -1390,8 +1393,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       const container = document.getElementById("dash-history-list");
       if (!container) return;
       if (!sessions || sessions.length === 0) {
-        container.innerHTML =
-          '<div class="empty-msg">No history exists yet. Sessions are saved when you end a meeting and click "Save".</div>';
+        container.innerHTML = getEmptyStateHTML(
+          "No history exists yet. Sessions are saved when you end them.",
+        );
         return;
       }
 
@@ -1817,3 +1821,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Load history on tab switch
   document.querySelector('[data-tab="history"]')?.addEventListener("click", loadMeetingHistory);
 });
+
+// --- Empty State Utility ---
+function getEmptyStateHTML(message: string, isList: boolean = false): string {
+  const tag = isList ? "li" : "div";
+  return `
+    <${tag} class="empty-state-container">
+      <div class="empty-state-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" x2="12" y1="19" y2="22"></line>
+        </svg>
+      </div>
+      <div class="empty-state-title">${message}</div>
+    </${tag}>
+  `;
+}
