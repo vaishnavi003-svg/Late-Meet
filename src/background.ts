@@ -235,6 +235,17 @@ const state: State = {
 let selfParticipantName: string | null = null;
 
 // ---------------------------------------------------------------------------
+// HydrationStatus — guard flags persisted alongside State for SW suspend/resume
+// ---------------------------------------------------------------------------
+interface HydrationStatus {
+  isStartingAudio: boolean;
+  isStoppingAudio: boolean;
+  isProcessingSession: boolean;
+  summaryInFlight: boolean;
+  selfParticipantName: string | null;
+}
+
+// ---------------------------------------------------------------------------
 // State Hydration for MV3 Service Worker Suspend/Resume
 // ---------------------------------------------------------------------------
 let stateHydrated = false;
@@ -245,7 +256,7 @@ async function hydrateState() {
   if (!hydrationPromise) {
     hydrationPromise = (async () => {
       try {
-        const data = await chrome.storage.local.get("activeMeetingState");
+        const data = await chrome.storage.local.get(["activeMeetingState", "activeMeetingGuards"]);
         const stored = data.activeMeetingState as Partial<State> | undefined;
         if (stored && typeof stored === "object") {
           // Validate structure before merging to prevent crashes from corrupted storage
@@ -277,6 +288,39 @@ async function hydrateState() {
             state.targetTabId = stored.targetTabId;
           if (typeof stored.participantCount === "number")
             state.participantCount = stored.participantCount;
+        }
+
+        // Restore guard flags alongside state
+        const guards = data.activeMeetingGuards as HydrationStatus | undefined;
+        if (guards && typeof guards === "object") {
+          if (typeof guards.isStartingAudio === "boolean") isStartingAudio = guards.isStartingAudio;
+          if (typeof guards.isStoppingAudio === "boolean") isStoppingAudio = guards.isStoppingAudio;
+          if (typeof guards.isProcessingSession === "boolean")
+            isProcessingSession = guards.isProcessingSession;
+          if (typeof guards.summaryInFlight === "boolean") summaryInFlight = guards.summaryInFlight;
+          if (typeof guards.selfParticipantName === "string" || guards.selfParticipantName === null)
+            selfParticipantName = guards.selfParticipantName;
+        }
+
+        // Reconciliation: detect stale audio state when offscreen is gone
+        if (state.audioActive) {
+          try {
+            const contexts = await (chrome.runtime as any).getContexts({
+              contextTypes: ["OFFSCREEN_DOCUMENT"],
+              documentUrls: [OFFSCREEN_DOCUMENT_URL],
+            });
+            if (contexts.length === 0) {
+              console.warn(
+                "[LateMeet] Hydration: offscreen document missing — resetting audioActive",
+              );
+              state.audioActive = false;
+              isStoppingAudio = false;
+              isStartingAudio = false;
+            }
+          } catch {
+            // getContexts may fail if context is invalid; reset to be safe
+            state.audioActive = false;
+          }
         }
       } catch (err) {
         console.error("[LateMeet] Failed to hydrate state:", err);
@@ -439,8 +483,19 @@ async function executeBroadcast() {
   const fullSnapshot = snapshot();
   const uiData = uiSnapshot();
 
+  const guards: HydrationStatus = {
+    isStartingAudio,
+    isStoppingAudio,
+    isProcessingSession,
+    summaryInFlight,
+    selfParticipantName,
+  };
+
   try {
-    await chrome.storage.local.set({ activeMeetingState: fullSnapshot });
+    await chrome.storage.local.set({
+      activeMeetingState: fullSnapshot,
+      activeMeetingGuards: guards,
+    });
   } catch (err) {
     console.error("[LateMeet] Failed to persist state to storage:", err);
   }
@@ -1833,6 +1888,20 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   } catch (openError) {
     console.error("[LateMeet] Failed to open side panel from context menu:", openError);
   }
+});
+
+// ---------------------------------------------------------------------------
+// Flush guard flags to storage before service worker is terminated
+// ---------------------------------------------------------------------------
+chrome.runtime.onSuspend.addListener(() => {
+  const guards: HydrationStatus = {
+    isStartingAudio,
+    isStoppingAudio,
+    isProcessingSession,
+    summaryInFlight,
+    selfParticipantName,
+  };
+  chrome.storage.local.set({ activeMeetingGuards: guards }).catch(() => {});
 });
 
 // Proactive scan on startup/load
