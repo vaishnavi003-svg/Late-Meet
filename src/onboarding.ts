@@ -85,7 +85,7 @@ export async function renderOnboarding(container: HTMLElement) {
         <ol>
           <li>Join a Google Meet</li>
           <li>Open the Late Meet popup and start Copilot</li>
-          <li>Use "Catch Me Up" for shortings</li>
+          <li>Use "Catch Me Up" for summaries</li>
         </ol>
       `,
     },
