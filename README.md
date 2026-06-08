@@ -636,16 +636,15 @@ _No open issues for this level right now! Stay tuned._
 
 #### 🟡 Intermediate — `level-2`
 
-|                             #                             | Title                                                                                    | Skills  |
-| :-------------------------------------------------------: | :--------------------------------------------------------------------------------------- | :------ |
-| [#412](https://github.com/shouri123/Late-Meet/issues/412) | \[Enhancement\] Add support for Google Meet breakout room transcription                  | General |
-| [#410](https://github.com/shouri123/Late-Meet/issues/410) | \[Bug\] \`background.ts\` service worker fails to restart after Chrome updates extension | General |
+|                             #                             | Title                                                           | Skills  |
+| :-------------------------------------------------------: | :-------------------------------------------------------------- | :------ |
+| [#573](https://github.com/shouri123/Late-Meet/issues/573) | \[Bug\] Add Stress Tests for High-Volume Audio Chunk Processing | General |
 
 #### 🔴 Advanced — `level-3`
 
-|                             #                             | Title                                                                               | Skills  |
-| :-------------------------------------------------------: | :---------------------------------------------------------------------------------- | :------ |
-| [#411](https://github.com/shouri123/Late-Meet/issues/411) | \[Performance\] \`speakerAttribution.ts\` allocates new arrays on every audio frame | General |
+|                             #                             | Title                                                                                                    | Skills  |
+| :-------------------------------------------------------: | :------------------------------------------------------------------------------------------------------- | :------ |
+| [#568](https://github.com/shouri123/Late-Meet/issues/568) | \[UI Enhancement\] Add focus-visible style and explicit tab index to the floating "Start Copilot" button | General |
 
 </div>
 <!-- END_ISSUE_TABLES -->
