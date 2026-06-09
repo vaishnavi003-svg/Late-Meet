@@ -654,7 +654,6 @@ git push origin feature/your-feature-name
 | [#638](https://github.com/shouri123/Late-Meet/issues/638) | feat: Support model selection (GPT-4o, GPT-4o-mini, GPT-3.5-turbo) in settings | General |
 | [#634](https://github.com/shouri123/Late-Meet/issues/634) | feat: Implement transcript language selection dropdown (Spanish, French, German, etc.) | General |
 | [#628](https://github.com/shouri123/Late-Meet/issues/628) | docs: Document offscreen document architecture and audio capture flow | General |
-| [#467](https://github.com/shouri123/Late-Meet/issues/467) | \[FEAT\] Enable Markdown, JSON & TXT Export in Dashboard | General |
 
 
 #### 🟡 Intermediate — `level-2`
@@ -686,7 +685,6 @@ git push origin feature/your-feature-name
 | [#526](https://github.com/shouri123/Late-Meet/issues/526) | \[BUG\] Options page blocks non-secret settings saves when credential storage is locked | General |
 | [#494](https://github.com/shouri123/Late-Meet/issues/494) | \[CHORE\] \`config.ts\` only contains 3 constants — 7+ magic numbers in background.ts and offscreen.ts are uncentralized | General |
 | [#470](https://github.com/shouri123/Late-Meet/issues/470) | \[A11Y\] Comprehensive ARIA Accessibility for Dashboard | General |
-| [#466](https://github.com/shouri123/Late-Meet/issues/466) | \[FEAT\] Clear Data Button in Settings | General |
 
 
 #### 🔴 Advanced — `level-3`
