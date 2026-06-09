@@ -1,3 +1,5 @@
+import { evaluatePassphraseStrength } from "../passphraseStrength";
+
 const ENCRYPTED_MARKER = "enc:";
 
 export type CredentialKey = "openai_api_key" | "elevenlabs_api_key";
@@ -104,6 +106,13 @@ export async function unlockCredentials(passphrase: string): Promise<boolean> {
     derivedKey = key;
     resetAutoLockTimer();
     return true;
+  }
+
+  // First-time setup: enforce the minimum passphrase strength at the boundary so
+  // every caller (options, popup, onboarding) is covered, not just the UI (#655).
+  // Only applies to setup — unlocking an existing vault above is never gated.
+  if (!evaluatePassphraseStrength(passphrase).meetsMinimum) {
+    return false;
   }
 
   const salt = crypto.getRandomValues(new Uint8Array(SALT_LENGTH));
