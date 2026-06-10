@@ -408,3 +408,25 @@ body {
     0 0 0 4px hsl(var(--accent-color));
   transform: scale(1.05);
 }
+/*CSS GRID(UPDATE)*/
+@media(min-width:768px){
+  .options-container{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:0;
+  }
+}
+.options-grid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 640px) {
+  .options-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.options-section {
+  height: 100%;
+}
+
