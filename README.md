@@ -81,6 +81,23 @@
 - [Our Solution](#-our-solution)
 - [Features](#-features)
 - [Screenshots & Workflow](#️-screenshots--workflow)
+- [Architecture](#️-architecture)
+- [Project Structure](#-project-structure)
+- [Installation](#️-installation)
+  - [Quick Install (For Regular Users)](#quick-install-for-regular-users)
+  - [Developer Setup (For Contributors)](#-developer-setup-for-contributors)
+- [API Key Setup](#-api-key-setup)
+- [Tech Stack](#️-tech-stack)
+- [Roadmap](#️-roadmap)
+- [Contributing — GSSoC 2026](#-contributing--gssoc-2026)
+- [Documentation Hub](#-documentation-hub)
+- [Known Issues](#-known-issues)
+- [Keyboard Shortcuts](#️-keyboard-shortcuts)
+- [Security & Privacy](#-security--privacy)
+- [FAQ](#-faq)
+- [Community](#-community)
+- [License](#-license)
+- [Troubleshooting](#troubleshooting)
 
 ## 🌟 The Problem
 
