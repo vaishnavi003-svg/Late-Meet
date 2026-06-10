@@ -117,7 +117,7 @@ export function sanitizeDataAttr(value: unknown): string {
   } else {
     str = JSON.stringify(value);
   }
-  return str.replace(/['\"<>&]/g, (match) => {
+  return str.replace(/['"<>&]/g, (match) => {
     const escapeMap: Record<string, string> = {
       "'": "&#39;",
       '"': "&quot;",
