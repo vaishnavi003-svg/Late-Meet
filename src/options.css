@@ -415,7 +415,7 @@ body {
 .color-dot[data-color="280, 75%, 60%"]  { background: hsl(280, 75%, 60%); }
 .color-dot[data-color="15, 95%, 55%"]   { background: hsl(15, 95%, 55%); }
 .color-dot[data-color="340, 85%, 55%"]  { background: hsl(340, 85%, 55%); }
-/*CSS GRID(UPDATE)*/
+/* CSS GRID(UPDATE) */
 
 .options-grid {
   display: grid;
