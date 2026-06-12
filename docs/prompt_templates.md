@@ -6,13 +6,13 @@ Late Meet turns meeting transcripts into concise summaries. The prompt shape you
 
 Use the same high-level fields for every summary style so templates remain easy to compare and customize.
 
-| Field | Purpose |
-| --- | --- |
-| `role` | Defines the model's writing perspective. |
-| `context` | Explains the meeting type, audience, and transcript source. |
-| `task` | States the summary format to produce. |
-| `constraints` | Keeps output concise, factual, and scoped to the transcript. |
-| `output_format` | Lists the sections the response must include. |
+| Field           | Purpose                                                      |
+| --------------- | ------------------------------------------------------------ |
+| `role`          | Defines the model's writing perspective.                     |
+| `context`       | Explains the meeting type, audience, and transcript source.  |
+| `task`          | States the summary format to produce.                        |
+| `constraints`   | Keeps output concise, factual, and scoped to the transcript. |
+| `output_format` | Lists the sections the response must include.                |
 
 ## Standard Summary
 
@@ -82,4 +82,3 @@ output_format:
 - Tighten `constraints` if summaries become too long or speculative.
 - Expand `output_format` only when the downstream workflow needs that structure.
 - Keep prompts versioned when changing production templates so old summaries remain reproducible.
-
