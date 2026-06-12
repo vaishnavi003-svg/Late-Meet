@@ -662,8 +662,6 @@ git push origin feature/your-feature-name
 | [#629](https://github.com/shouri123/Late-Meet/issues/629) | feat: Add configurable VAD (Voice Activity Detection) frame size setting | General |
 | [#626](https://github.com/shouri123/Late-Meet/issues/626) | feat: Add audio channels mapping and stereo-to-mono downmixing in offscreen | General |
 | [#623](https://github.com/shouri123/Late-Meet/issues/623) | feat: Implement adaptive Web Audio API noise gate for offscreen audio capture | General |
-| [#526](https://github.com/shouri123/Late-Meet/issues/526) | \[BUG\] Options page blocks non-secret settings saves when credential storage is locked | General |
-| [#494](https://github.com/shouri123/Late-Meet/issues/494) | \[CHORE\] \`config.ts\` only contains 3 constants — 7+ magic numbers in background.ts and offscreen.ts are uncentralized | General |
 
 
 #### 🔴 Advanced — `level-3`
@@ -674,7 +672,6 @@ git push origin feature/your-feature-name
 | [#643](https://github.com/shouri123/Late-Meet/issues/643) | feat: Add animated canvas audio waveform visualizer inside popup during capture | General |
 | [#632](https://github.com/shouri123/Late-Meet/issues/632) | perf: Optimize Web Audio analyzer frequency analysis to reduce CPU overhead | General |
 | [#610](https://github.com/shouri123/Late-Meet/issues/610) | Race Condition Between stopAudioCapture() and Offscreen Drain Orphans tabCapture Streams + Silently Drops Final Transcript Chunks | General |
-| [#526](https://github.com/shouri123/Late-Meet/issues/526) | \[BUG\] Options page blocks non-secret settings saves when credential storage is locked | General |
 
 
 </div>
