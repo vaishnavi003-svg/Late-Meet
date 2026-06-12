@@ -691,7 +691,7 @@ async function executeBroadcast() {
     selfParticipantName,
   };
 
-  truncateOverflow(fullSnapshot as unknown as Record<string, unknown>, "storage");
+  truncateOverflow(fullSnapshot, "storage");
   truncateOverflow(uiData as unknown as Record<string, unknown>, "message");
 
   try {
