@@ -1,4 +1,5 @@
 import { describe, it } from 'node:test';
+import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import fc from 'fast-check';
 import { escapeHtml, sanitizeTopicStatus } from './domHelpers';
