@@ -215,6 +215,11 @@ body {
   gap: 12px;
 }
 
+.form-range:focus-visible {
+  outline: 2px solid hsl(var(--accent-color, 210, 100%, 50%));
+  outline-offset: 2px;
+}
+
 .form-range {
   flex: 1;
   height: 4px;
