@@ -654,7 +654,6 @@ git push origin feature/your-feature-name
 | [#653](https://github.com/shouri123/Late-Meet/issues/653) | feat: Implement strict Content Security Policy (CSP) headers in manifest | General |
 | [#652](https://github.com/shouri123/Late-Meet/issues/652) | feat: Custom accent color picker in options page using color palette grid | General |
 | [#645](https://github.com/shouri123/Late-Meet/issues/645) | feat: Support export of meeting sessions as PDF with clean styling template | General |
-| [#640](https://github.com/shouri123/Late-Meet/issues/640) | test: Add mock API integration tests for transcript refinement pipeline | General |
 | [#639](https://github.com/shouri123/Late-Meet/issues/639) | feat: Implement structured JSON mode output for transcript refinements | General |
 | [#637](https://github.com/shouri123/Late-Meet/issues/637) | fix: Handle token limit warnings and implement automatic prompt truncation | General |
 | [#633](https://github.com/shouri123/Late-Meet/issues/633) | feat: Support custom system prompts for summary and action-item generation | General |
@@ -671,7 +670,6 @@ git push origin feature/your-feature-name
 | [#654](https://github.com/shouri123/Late-Meet/issues/654) | feat: Purge plaintext credential keys from RAM cache when inactivity timeout fires | General |
 | [#643](https://github.com/shouri123/Late-Meet/issues/643) | feat: Add animated canvas audio waveform visualizer inside popup during capture | General |
 | [#632](https://github.com/shouri123/Late-Meet/issues/632) | perf: Optimize Web Audio analyzer frequency analysis to reduce CPU overhead | General |
-| [#610](https://github.com/shouri123/Late-Meet/issues/610) | Race Condition Between stopAudioCapture() and Offscreen Drain Orphans tabCapture Streams + Silently Drops Final Transcript Chunks | General |
 
 
 </div>
