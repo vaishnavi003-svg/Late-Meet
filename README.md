@@ -696,7 +696,6 @@ git push origin feature/your-feature-name
 | [#654](https://github.com/shouri123/Late-Meet/issues/654) | feat: Purge plaintext credential keys from RAM cache when inactivity timeout fires | General |
 | [#643](https://github.com/shouri123/Late-Meet/issues/643) | feat: Add animated canvas audio waveform visualizer inside popup during capture | General |
 | [#632](https://github.com/shouri123/Late-Meet/issues/632) | perf: Optimize Web Audio analyzer frequency analysis to reduce CPU overhead | General |
-| [#610](https://github.com/shouri123/Late-Meet/issues/610) | Race Condition Between stopAudioCapture() and Offscreen Drain Orphans tabCapture Streams + Silently Drops Final Transcript Chunks | General |
 
 
 </div>
