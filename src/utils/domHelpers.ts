@@ -27,8 +27,8 @@ describe('Fuzz Tests - DOM Helpers', () => {
       ];
       for (const vector of xssVectors) {
         const escaped = escapeHtml(vector);
-        assert(!escaped.includes('<script'));
-        assert(!escaped.includes('onerror='));
+        assert(!escaped.includes('<'));
+        assert(!escaped.includes('>'));
       }
     });
   });
