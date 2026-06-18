@@ -326,17 +326,15 @@ void initTheme().catch((err) => console.error(err));
           ).filter((el) => el.offsetParent !== null);
           if (focusable.length === 0) return;
           const first = focusable[0];
-          const last = focusable[focusable.length - 1];
+          const last = focusable.at(-1)!;
           if (event.shiftKey) {
             if (document.activeElement === first) {
               event.preventDefault();
               last.focus();
             }
-          } else {
-            if (document.activeElement === last) {
-              event.preventDefault();
-              first.focus();
-            }
+          } else if (document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
           }
         }
       });
